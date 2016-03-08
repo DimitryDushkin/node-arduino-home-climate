@@ -1,13 +1,13 @@
+#include <DHT.h>
 #include <troyka-imu.h>
 #include <Wire.h>
 #include <LiquidCrystal.h>
-#include <TroykaDHT11.h>
 
 #define LOUDNESS_SENSOR_PIN A0
 #define MEASURE_FREQUENCE 5
 #define MEASURE_TIME 50
 
-DHT11 dht(7);
+DHT dht(7, DHT11);
 Barometer barometer;
 
 // Инициализируем объект-экран, передаём использованные 
@@ -38,21 +38,21 @@ void loop()
 {
   Measurments m = printTempAndHumid();
   m.pressure = printPressure();
-//  printNoise();
+  m.noise = printNoise();
 
-  Serial.println("<" + m.temp + "C><" + m.humid + "%><" + m.pressure + "mbar>");
+  Serial.println("<" + m.temp + "C><" + m.humid + "%><" + m.pressure + "mbar><" + m.noise + "noise>");
   
   delay(10000);
 }
 
-void printNoise() {
+String printNoise() {
   unsigned int sum = 0;
 
   for (int i = 0; i < MEASURE_FREQUENCE; i++) {
     sum += getMinMaxLevels();
   }
 
-  Serial.println(sum / MEASURE_FREQUENCE);
+  return String(sum / MEASURE_FREQUENCE);
 }
 
 unsigned long getMinMaxLevels() {
@@ -93,38 +93,25 @@ String printPressure() {
 }
 
 struct Measurments printTempAndHumid() {
-  int check = dht.read();
   struct Measurments m;
   
-  switch (check) {
-    // всё OK
-    case DHT_OK:
-      m.temp = String(dht.getTemperatureC());
-      m.humid = String(dht.getHumidity());
-    
-      // выводим показания влажности и температуры
-      temp = String("Temperature = " + m.temp + "C");
-      lcd.setCursor(0, 0);
-      lcd.print(temp);
+    m.temp = String(int(dht.readTemperature()));
+    m.humid = String(int(dht.readHumidity()));
 
-      humidity = String("Humidity = " + m.humid + "%");
-      lcd.setCursor(0, 1);
-      lcd.print(humidity);
-      break;
-      
-    // ошибка контрольной суммы
-    case DHT_ERROR_CHECKSUM:
-      lcd.println("Checksum error");
-      break;
-    // превышение времени ожидания
-    case DHT_ERROR_TIMEOUT:
-      lcd.println("Time out error");
-      break;
-    // неизвестная ошибка
-    default:
-      lcd.println("Unknown error");
-      break;
-  }
+    if (m.temp == '\0' || m.humid == '\0') {
+        lcd.setCursor(0, 0);
+        lcd.print("DHT11 error");
+        return m;
+    }
+  
+    // выводим показания влажности и температуры
+    temp = String("Temperature = " + m.temp + "C");
+    lcd.setCursor(0, 0);
+    lcd.print(temp);
+
+    humidity = String("Humidity = " + m.humid + "%");
+    lcd.setCursor(0, 1);
+    lcd.print(humidity);
 
   return m;
   
