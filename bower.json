@@ -1,0 +1,21 @@
+{
+  "name": "home-server",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Dmitry Dushkin <dndushkin@yandex-team.ru>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/DimitryDushkin/node-arduino-home-climate",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "metrics-graphics": "^2.9.0"
+  }
+}

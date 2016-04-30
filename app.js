@@ -1,10 +1,10 @@
-var express = require('express');
-var path = require('path');
-var routes = require('./routes/index');
-
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var express = require('express'),
+  path = require('path'),
+  routes = require('./routes/index'),
+  app = express(),
+  server = require('http').Server(app),
+  io = require('socket.io')(server),
+  stateEmitter = require('./hardware');
 
 const PORT = 3000;
 
@@ -22,4 +22,7 @@ server.listen(PORT, function() {
 });
 
 // append socket.io logic
-require('./socket')(io);
+require('./socket')(stateEmitter, io);
+
+//append db logging logic
+require('./db')(stateEmitter);

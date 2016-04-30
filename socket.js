@@ -1,41 +1,27 @@
-var SerialPort = require('serialport');
-var serialPort = new SerialPort.SerialPort('/dev/cu.usbmodem1421', {
-    baudrate: 9600,
-    parser: SerialPort.parsers.readline("\n")
-});
+function sendStateToClient(socket, state) {
+    socket.emit('arduino', state);
+}
 
+module.exports = function(stateEmitter, io) {
+    var state;
 
-// list ports
-//var serialPort = require("serialport");
-//serialPort.list(function (err, ports) {
-//    ports.forEach(function(port) {
-//        console.log(port.comName);
-//        console.log(port.pnpId);
-//        console.log(port.manufacturer);
-//    });
-//});
+    stateEmitter.on('state-change', (newState) => {
+        state = newState;
+    });
 
-module.exports = function(io) {
-    var serialReadyPromise = new Promise(function(resolve, reject) {
-            serialPort.on('open', resolve);
-        }),
-        lastData;
-
+    // on connection of new client
     io.on('connection', function(socket) {
-        serialReadyPromise.then(function() {
-            if (lastData) {
-                sendDataToClient(socket, lastData);
-            }
+        if (state) {
+            sendStateToClient(socket, state);
+        }
 
-            serialPort.on('data', function(data) {
-                lastData = data;
-                sendDataToClient(socket, data);
-            });
+        stateEmitter.on('state-change', (state) => {
+            sendStateToClient(socket, state);
+        });
+
+        socket.on('disconnect', () => {
+            stateEmitter.removeListener('state-change', sendStateToClient);
         });
     });
 
-}
-
-function sendDataToClient(socket, data) {
-    socket.emit('arduino', data);
-}
+};

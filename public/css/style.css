@@ -1,3 +1,7 @@
+html, body {
+  min-height: 100%;
+}
+
 body {
     padding: 100px 50px;
     font: 24px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -44,3 +48,7 @@ h6 {
 }
 
 li { margin-bottom: 1em }
+
+.graphic {
+    background-color: #fff;
+}
