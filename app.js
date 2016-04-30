@@ -1,12 +1,12 @@
 var express = require('express'),
-  path = require('path'),
-  routes = require('./routes/index'),
-  app = express(),
-  server = require('http').Server(app),
-  io = require('socket.io')(server),
-  stateEmitter = require('./hardware');
+    path = require('path'),
+    routes = require('./routes/index'),
+    app = express(),
+    server = require('http').Server(app),
+    io = require('socket.io')(server),
+    stateEmitter = require('./hardware');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

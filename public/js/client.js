@@ -15,7 +15,7 @@ $(function() {
     });
 
     $
-        .getJSON('/graph', (data) => {
+        .getJSON('/graph', function(data) {
             for (var i = 0; i < data.length; i++) {
                 data[i].date = new Date(data[i].timestamp);
             }
