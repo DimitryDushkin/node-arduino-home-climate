@@ -1,8 +1,6 @@
 var express = require('express'),
-    router = express.Router();
-
-var MongoClient = require('mongodb').MongoClient,
-    url = 'mongodb://localhost:27017/home';
+    router = express.Router(),
+    db = require('../db');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -10,17 +8,11 @@ router.get('/', function(req, res) {
 });
 
 router.get('/graph', (req, res) => {
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        db.collection('presence').find().toArray((err, docs) => {
-            res.send(docs);
-            db.close();
+    db
+        .getAllPresence()
+        .then((rows) => {
+            res.send(rows);
         });
-    });
 });
 
 module.exports = router;

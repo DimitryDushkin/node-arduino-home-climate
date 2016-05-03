@@ -4,7 +4,8 @@ var express = require('express'),
     app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
-    stateEmitter = require('./hardware');
+    stateEmitter = require('./hardware'),
+    db = require('./db');
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,4 +26,6 @@ server.listen(PORT, function() {
 require('./socket')(stateEmitter, io);
 
 //append db logging logic
-require('./db')(stateEmitter);
+stateEmitter.on('state-change', (state) => {
+    db.savePresence(state.presence);
+});

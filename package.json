@@ -10,7 +10,7 @@
     "express": "~4.13.4",
     "jade": "~1.11.0",
     "johnny-five": "^0.9.44",
-    "mongodb": "^2.1.18",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "sqlite3": "^3.1.3"
   }
 }
