@@ -1,3 +1,4 @@
+/* global io, MG */
 $(function() {
     var socket = io.connect('/');
     socket.on('arduino', function (state) {
@@ -19,6 +20,11 @@ $(function() {
             for (var i = 0; i < data.length; i++) {
                 data[i].date = new Date(data[i].timestamp);
             }
+
+            data.push({
+                date: Date.now(),
+                presence: data[data.length - 1].presence
+            });
 
             MG.data_graphic({
                 title: 'Presence graph',
