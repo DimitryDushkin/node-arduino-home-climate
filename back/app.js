@@ -1,20 +1,18 @@
 var express = require('express'),
     path = require('path'),
-    routes = require('./routes/index'),
+    routes = require('./routes'),
     app = express(),
     server = require('http').Server(app),
     io = require('socket.io')(server),
     stateEmitter = require('./hardware'),
-    db = require('./db');
+    db = require('./db'),
+    compression = require('compression');
 
 const PORT = process.env.PORT || 3000;
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.use(compression());
+app.use(express.static(__dirname + './../dist'));
 
-// uncomment after placing your favicon in /public
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
