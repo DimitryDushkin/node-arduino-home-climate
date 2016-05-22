@@ -11,7 +11,7 @@ module.exports = {
         publicPath: '/',
         filename: '/bundle.js'
     },
-    // devtool: 'cheap-source-map',
+    devtool: 'source-map',
     module: {
         loaders: [
             {
@@ -21,15 +21,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: isProd
-                    ? ExtractTextPlugin.extract(['css', '!postcss-loader'])
-                    : 'style!css!postcss-loader'
-            },
-            {
-                test: /\.sass$/,
-                loader: isProd
-                    ? ExtractTextPlugin.extract(['css', '!postcss-loader'])
-                    : 'style!css!postcss-loader'
+                loader: ExtractTextPlugin.extract(['css', 'postcss-loader'])
             }
         ]
     },
@@ -52,7 +44,7 @@ module.exports = {
 function getJsLoaders() {
     var loaders = ['babel'];
     if (!isProd) {
-        loaders.unshift('react-hot');
+        // loaders.unshift('react-hot');
     }
     return loaders;
 }
@@ -70,14 +62,14 @@ function getPlugins() {
         }),
         new webpack.ResolverPlugin(
             new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
-        )
+        ),
+        new ExtractTextPlugin('/bundle.css', {
+            allChunks: true
+        })
     ];
 
     if (isProd) {
         plugins = plugins.concat([
-            new ExtractTextPlugin('/css/bundle.css', {
-                allChunks: true
-            }),
             new webpack.DefinePlugin({
                 'process.env': {
                     'NODE_ENV': JSON.stringify('production')
@@ -93,7 +85,7 @@ function getPlugins() {
             })
         ]);
     } else {
-        plugins.push(new webpack.HotModuleReplacementPlugin());
+        // plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 
     return plugins;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './container/App.jsx';
+import Content from './container/Content.jsx';
 
-ReactDOM.render(<App />, document.querySelector('.app-container'));
+ReactDOM.render(<Content />, document.querySelector('.app-container'));

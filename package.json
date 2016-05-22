@@ -9,7 +9,7 @@
     "webpack-server": "webpack-dev-server",
     "web-server": "http-server ./dist --p=5030",
     "build": "NODE_ENV=production webpack",
-    "dev": "npm run webpack-server"
+    "dev": "webpack --progress --colors --watch"
   },
   "author": "Dmitry Dushkin",
   "license": "ISC",

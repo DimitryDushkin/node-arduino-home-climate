@@ -1,0 +1,22 @@
+{
+  "name": "mmk-graphs",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Dmitry Dushkin"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/DimitryDushkin/node-arduino-home-climate",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.5.17"
+  }
+}
