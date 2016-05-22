@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.App__content {
+    padding: 24px;
+}
+
+.App__section {
+    padding: 24px;
+}
